@@ -3,10 +3,11 @@
 # Environment:
 #   R version 4.4.2
 #   RStudio 2024.09.1+394
-# Required packages (tested):
-#   readxl  (vX.X.X)
-#   dplyr   (vX.X.X)
-#   ggplot2 (vX.X.X)
+# Required packages:
+#   readxl  (v1.4.5)
+#   dplyr   (v1.1.4)
+#   ggplot2 (v3.5.2)
+#   readr   (v2.1.5)
 # Input:
 #   data/SourceData_Main+ED.xlsx
 #   Sheet: "Fig2B"
@@ -20,7 +21,7 @@ library(readr)
 # Input
 df <- read_excel(
   path  = "data/SourceData_Main+ED.xlsx",
-  sheet = "Fig2AB"
+  sheet = "Fig2B"
 )
 
 # Define
