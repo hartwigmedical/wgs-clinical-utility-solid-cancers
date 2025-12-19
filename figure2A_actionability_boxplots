@@ -23,7 +23,7 @@ library(readxl)
 # Input
 df <- read_excel(
   path  = "data/SourceData_Main+ED.xlsx",
-  sheet = "Fig2AB"
+  sheet = "Fig2A"
 )
 
 df_long <- df %>%
