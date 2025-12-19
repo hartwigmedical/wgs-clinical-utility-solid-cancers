@@ -124,3 +124,12 @@ ggplot(df_long, aes(x = Tumour_type, y = Percentage, fill = FillKey)) +
            hjust = -0.4,
            size = 4,
            family = "Helvetica")
+
+
+
+ggsave(
+  filename = "output/Figure2D_actionability_cancer_types.pdf",
+  width = 12.5,
+  height = 6,
+  units = "in"
+)
