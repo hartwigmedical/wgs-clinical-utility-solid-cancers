@@ -20,7 +20,7 @@ library(readxl)
 
 # Input
 df <- read_excel(
-  path  = "~/Documents/Post-WIDE/SourceData_Main+ED.xlsx",
+  path  = "data/SourceData_Main+ED.xlsx",
   sheet = "Fig2C"
 ) %>%
   mutate(
