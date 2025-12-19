@@ -1,1 +1,90 @@
+# figure2A_actionability_boxplot.R
+# Purpose: Generate the boxplots underlying Figure 2A: number of biomarkers and actionable biomarkers per patient, stratified by diagnosis category (known primary tumour vs CUP)
+# Environment:
+#   R version 4.4.2
+#   RStudio 2024.09.1+394
+# Required packages:
+#   readxl    (v1.4.5)
+#   ggplot2   (v3.5.2)
+#   tidyr     (v1.3.1)
+#   dplyr     (v1.1.4)
+# Input:
+#   data/SourceData_Main+ED.xlsx
+#   Sheet: "Fig2A"
+# Output:
+#   output/Figure2A_actionability_boxplot.pdf
+#   (In the final figure, minor layout refinements and labels were adjusted in Inkscape before submission)
 
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(readxl)
+
+# Input
+df <- read_excel(
+  path  = "~/Documents/Post-WIDE/SourceData_Main+ED.xlsx",
+  sheet = "Fig2A"
+)
+
+df_long <- df %>%
+  pivot_longer(cols = c("All biomarkers", "Actionable only"),
+               names_to = "Type", values_to = "Value") %>%
+  mutate(Group = paste(`Diagnosis category`, Type, sep = " - "),
+         Facet = factor(`Diagnosis category`, 
+                        levels = c("Known primary tumour", "Cancer of unknown primary")),
+         Type = factor(Type, levels = c("All biomarkers", "Actionable only")))
+
+# Aesthetics
+df_long <- df_long %>%
+  mutate(Fill = case_when(
+    Facet == "Known primary tumour" & Type == "All biomarkers" ~ "known.all",
+    Facet == "Known primary tumour" & Type == "Actionable only" ~ "known.actionable",
+    Facet == "Cancer of unknown primary" & Type == "All biomarkers" ~ "cup.all",
+    Facet == "Cancer of unknown primary" & Type == "Actionable only" ~ "cup.actionable"
+  ))
+
+fill_colors <- c(
+  "known.all" = "#D3EFFF",    
+  "known.actionable" = "#A9DCFB",    
+  "cup.all" = "#D8BFD8",   
+  "cup.actionable" = "#CC96E6"   
+)
+
+# Plot
+ggplot(df_long, aes(x = Type, y = Value, fill = Fill)) +
+  geom_boxplot(outlier.size = 1, width = 0.6) +
+  scale_x_discrete(labels = c(
+    "All biomarkers", "Actionable only" = "\n\nActionable only"
+  )) +
+  scale_y_continuous(
+    breaks = seq(0, 15, by = 5),
+    minor_breaks = seq (0, 15, by = 1)
+  ) +
+  facet_wrap(~Facet, strip.position = "top", scales = "free_x", labeller = as_labeller(c(
+    "Known primary tumour" = "Known primary tumour\nn = 600\n",
+    "Cancer of unknown primary" = "Cancer of Unknown Primary\nn = 123\n"
+  ))) +
+  scale_fill_manual(values = fill_colors) +
+  labs(x = NULL, y = "Number\nof biomarkers") +
+  theme_minimal() +
+  theme(
+    strip.placement = "outside",
+    strip.background = element_blank(),
+    strip.text = element_text(size = 14),
+    axis.text.x = element_text(size = 13, family = "Helvetica"),
+    axis.text.y = element_text(size = 12, family = "Helvetica"),
+    axis.title.y = element_text(size = 12, angle = 0, family = "Helvetica"),
+    legend.position = "none",
+    panel.spacing = unit(0.5 , "lines")
+  )
+
+# Save
+if (!dir.exists("output")) dir.create("output", recursive = TRUE)
+
+ggsave(
+  filename = "output/Figure2A_actionability_boxplot.pdf",
+  width = 6.50,
+  height = 6.50,
+  units = "in",
+  dpi = 300
+)
