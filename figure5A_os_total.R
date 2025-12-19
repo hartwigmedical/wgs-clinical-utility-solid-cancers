@@ -1,5 +1,19 @@
-
-
+# figure5A_os_total.R
+# Environment: R 4.4.2; RStudio 2024.09.1+394
+# Required packages: 
+#    readxl, 
+#    dplyr, 
+#    survival, 
+#    survminer, 
+#    ggplot2
+# Input:
+#    data/SourceData_Main+ED.xlsx, sheet: Fig5A
+# Output:
+#     output/figure5a_overall_survival.pdf 
+#     output/figure5a_overall_survival_risktable.pdf 
+# Notes on figure assembly:
+#     The curve and risk table were exported separately as vector PDFs and assembled into the final multi-panel figure in Inkscape.
+#     Inkscape edits were layout-only (alignment, placement of median labels, addition of median “orb” markers, and styling of median guide lines). No underlying data or statistical results were altered.
 
 library(readxl)
 library(dplyr)
