@@ -14,12 +14,6 @@ df <- read_excel(
 
 # Define
 df <- df %>%
-  rename(
-    Reimbursed = `Total number of biomarkers guiding reimbursed care`,
-    Experimental = `Number of experimental treatment biomarkers`,
-  )
-
-df <- df %>%
   mutate(
     Actionability = case_when(
       Reimbursed > 0 & Experimental == 0 ~ "Reimbursed",
