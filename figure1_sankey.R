@@ -7,10 +7,11 @@
 #     networkD3 v0.4
 #     htmlwidgets v1.6.4.
 #     extrafont v0.20
-# Input: None: node and link data defined in the script (counts corresponding to the curated cohort described in the manuscript)
+# Input: 
+#     None: node and link data defined in the script (counts corresponding to the curated cohort described in the manuscript)
 # Output: output/Figure1_sankey_raw.html 
 #     HTML output was exported to SVG
-#     Final node positions were aligned manually and labels were added in Inkscape
+#     Final node positions were aligned manually and labels were added in Inkscape before submission as pdf
 
 library(networkD3) 
 library(extrafont)
