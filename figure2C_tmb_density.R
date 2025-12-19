@@ -12,26 +12,26 @@
 #   Sheet: "Fig2C"
 # Output:
 #   output/Figure2C_tmb_density.pdf
-#   (Final layout refinements and labels were adjusted in Inkscape)
+#   (Final layout refinements and label positioning were adjusted in Inkscape)
 
 library(ggplot2)
 library(dplyr)
 library(readxl)
 
 # Input
-infile <- "~/Documents/Post-WIDE/SourceData_Main+ED.xlsx"
-sheet  <- "Fig2C"
-
-df <- read_excel(infile, sheet = sheet) %>%
+df <- read_excel(
+  path  = "~/Documents/Post-WIDE/SourceData_Main+ED.xlsx",
+  sheet = "Fig2C"
+) %>%
   mutate(
-    # robust EU decimal handling: "3,2" -> 3.2
     TMB = suppressWarnings(as.numeric(gsub(",", ".", `TMB (in variants/Mb)`))),
     `Diagnosis category` = factor(
       `Diagnosis category`,
       levels = c("Known primary tumour", "Cancer of unknown primary")
     )
   ) %>%
-  filter(!is.na(TMB), !is.na(`Diagnosis category`))
+  filter(!is.na(TMB), !is.na(`Diagnosis category`)) %>%
+  filter(TMB >= 0.1, TMB <= 1000)
 
 df_known <- df %>% filter(`Diagnosis category` == "Known primary tumour")
 df_cup   <- df %>% filter(`Diagnosis category` == "Cancer of unknown primary")
@@ -40,20 +40,8 @@ df_cup   <- df %>% filter(`Diagnosis category` == "Cancer of unknown primary")
 median_known <- median(df_known$TMB, na.rm = TRUE)
 median_cup   <- median(df_cup$TMB,   na.rm = TRUE)
 
-d_known <- density(df_known$TMB, na.rm = TRUE)
-d_cup   <- density(df_cup$TMB,   na.rm = TRUE)
-
-peak_known <- max(d_known$y)
-peak_cup   <- max(d_cup$y)
-
-yend_known <- 0.95 * peak_known
-yend_cup   <- -0.95 * peak_cup
-
-ytext_known <- 0.45 * peak_known
-ytext_cup   <- -0.45 * peak_cup
-
 # Aesthetics
-p <- ggplot() +
+p_base <- ggplot() +
   geom_density(
     data = df_known,
     aes(x = TMB, y = after_stat(density)),
@@ -64,16 +52,6 @@ p <- ggplot() +
     aes(x = TMB, y = after_stat(-density)),
     fill = "#CC96E6", alpha = 0.7, colour = NA
   ) +
-  geom_segment(aes(x = median_known, xend = median_known, y = 0, yend = yend_known),
-               colour = "black", linewidth = 1) +
-  geom_segment(aes(x = median_cup,   xend = median_cup,   y = 0, yend = yend_cup),
-               colour = "black", linewidth = 1) +
-  annotate("text", x = median_known, y = ytext_known,
-           label = sprintf("%.1f", median_known),
-           size = 5, fontface = "bold", vjust = -0.5) +
-  annotate("text", x = median_cup, y = ytext_cup,
-           label = sprintf("%.1f", median_cup),
-           size = 5, fontface = "bold", vjust = 1.2) +
   scale_x_log10(
     limits = c(0.1, 1000),
     breaks = c(0.1, 1, 10, 100, 1000),
@@ -90,12 +68,31 @@ p <- ggplot() +
     legend.position    = "none"
   )
 
+b <- ggplot_build(p_base)
+peak_known <- max(b$data[[1]]$y, na.rm = TRUE)
+peak_cup   <- abs(min(b$data[[2]]$y, na.rm = TRUE))
+
+# Combine
+label_shift <- 0.90
+
+p_final <- p_base +
+  geom_segment(aes(x = median_known, xend = median_known, y = 0, yend = peak_known),
+               colour = "black", linewidth = 1) +
+  geom_segment(aes(x = median_cup,   xend = median_cup,   y = 0, yend = -peak_cup),
+               colour = "black", linewidth = 1) +
+  annotate("text", x = median_known * label_shift, y = 0.45 * peak_known,
+           label = round(median_known, 1), fontface = "bold", size = 5,
+           hjust = 1) +
+  annotate("text", x = median_cup * label_shift, y = -0.45 * peak_cup,
+           label = round(median_cup, 1), fontface = "bold", size = 5,
+           hjust = 1)
+
 # Save
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
-  filename = "output/Figure2C_TMB_density.pdf",
-  width = 4.0,
-  height = 4.0,
+  "output/Figure2C_tmb_density.pdf", 
+  width = 4.0, 
+  height = 4.0, 
   units = "in"
 )
