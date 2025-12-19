@@ -74,7 +74,7 @@ df_long <- df_combined %>%
   ungroup() %>%
   filter(!is.na(Tumour_type))
 
-# Aesthetics and Plot
+# Aesthetics
 ggplot(df_long, aes(x = Tumour_type, y = Percentage, fill = FillKey)) +
   geom_bar(stat = "identity") +
   scale_fill_manual(values = c(
@@ -125,7 +125,8 @@ ggplot(df_long, aes(x = Tumour_type, y = Percentage, fill = FillKey)) +
            size = 4,
            family = "Helvetica")
 
-
+# Save
+if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
   filename = "output/Figure2D_actionability_cancer_types.pdf",
