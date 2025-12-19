@@ -133,12 +133,12 @@ km_plot$plot <- km_plot$plot +
 # Save
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
-ggsave("output/Figure5_overall_survival.pdf", 
+ggsave("output/figure5a_overall_survival.pdf", 
        km_plot$plot, 
        width = 7.0, 
        height = 5.0, 
        units = "in")
-ggsave("output/Figure5_overall_survival_risktable.pdf", 
+ggsave("output/figure5a_overall_survival_risktable.pdf", 
        km_plot$table, 
        width = 7.0, 
        height = 2.0, 
