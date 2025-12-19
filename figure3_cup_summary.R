@@ -34,7 +34,7 @@ df <- read_excel(
     # normalize strings
     `WGS-based CUP prediction algorithm solution` = str_squish(as.character(`WGS-based CUP prediction algorithm solution`)),
     `WGS-informed treatment` = str_squish(as.character(`WGS-informed treatment`)),
-    `>3mo follow-up for CUP treatment analysis` = toupper(str_squish(as.character(`>3mo follow-up for CUP treatment analysis`)))
+    `In-house follow-up for CUP treatment analysis` = toupper(str_squish(as.character(`In-house follow-up for CUP treatment analysis`)))
   )
 
 # Define
@@ -59,7 +59,7 @@ treat_levels <- c("No treatment data", "No systemic treatment", "CUP regimen",
 df <- df %>%
   mutate(
     wgs_treat = str_squish(as.character(`WGS-informed treatment`)),
-    fu3m = toupper(str_squish(as.character(`>3mo follow-up for CUP treatment analysis`))),
+    fu = toupper(str_squish(as.character(`In-house follow-up for CUP treatment analysis`))),
     treatment_cat = case_when(
       !is.na(wgs_treat) & wgs_treat != "" & !str_detect(str_to_lower(wgs_treat), "^no treatment$") ~ case_when(
         str_detect(str_to_lower(wgs_treat), "cup regimen") ~ "CUP regimen",
@@ -70,9 +70,9 @@ df <- df %>%
         TRUE ~ "Non-targeted"
       ),
       (is.na(wgs_treat) | wgs_treat == "" | str_detect(str_to_lower(wgs_treat), "^no treatment$")) &
-        !is.na(fu3m) & fu3m == "YES" ~ "No systemic treatment",
+        !is.na(fu) & fu == "YES" ~ "No systemic treatment",
       (is.na(wgs_treat) | wgs_treat == "" | str_detect(str_to_lower(wgs_treat), "^no treatment$")) &
-        (is.na(fu3m) | fu3m != "YES") ~ "No treatment data", 
+        (is.na(fu) | fu != "YES") ~ "No treatment data", 
       TRUE ~ "No treatment data"
     ),
     treatment_cat = factor(treatment_cat, levels = c(
