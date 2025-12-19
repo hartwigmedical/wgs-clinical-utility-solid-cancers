@@ -95,10 +95,6 @@ p_final <- p_base +
   annotate("text", x = median_cup * label_shift, y = -0.45 * peak_cup,
            label = sprintf("%.1f", lab_cup), fontface = "bold", size = 5, hjust = 1)
 
-
-p_final
-
-
 # Save
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
