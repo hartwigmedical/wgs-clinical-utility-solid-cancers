@@ -1,13 +1,13 @@
 # figure5A_os_total.R
 # Environment: R 4.4.2; RStudio 2024.09.1+394
 # Required packages: 
-#    readxl, 
-#    dplyr, 
-#    survival, 
-#    survminer, 
-#    ggplot2
+#    readxl     (1.4.5) 
+#    dplyr      (1.1.4)
+#    survival   (3.7-0)
+#    survminer  (0.5.0)
+#    ggplot2    (3.5.2)
 # Input:
-#    data/SourceData_Main+ED.xlsx, sheet: Fig5A
+#    data/SourceData_Main+ED.xlsx, sheet: Fig5
 # Output:
 #     output/figure5a_overall_survival.pdf 
 #     output/figure5a_overall_survival_risktable.pdf 
@@ -24,7 +24,7 @@ library(ggplot2)
 # Input
 df <- read_excel(
   path  = "data/SourceData_Main+ED.xlsx",
-  sheet = "Fig5A" 
+  sheet = "Fig5" 
 ) %>%
   mutate(
     Overall_survival_days = as.numeric(Overall_survival_days),
