@@ -85,6 +85,5 @@ ggsave(
   filename = "output/Figure2A_actionability_boxplot.pdf",
   width = 6.50,
   height = 6.50,
-  units = "in",
-  dpi = 300
+  units = "in"
 )
