@@ -74,6 +74,16 @@ peak_cup   <- abs(min(b$data[[2]]$y, na.rm = TRUE))
 
 label_shift <- 0.90
 
+round_half_up <- function(x, digits = 1) {
+  f <- 10^digits
+  ifelse(x >= 0,
+         floor((x + 1e-12) * f + 0.5) / f,
+         ceiling((x - 1e-12) * f - 0.5) / f)
+}
+
+lab_known <- round_half_up(median_known, 1)
+lab_cup   <- round_half_up(median_cup, 1)
+
 # Combine
 p_final <- p_base +
   geom_segment(aes(x = median_known, xend = median_known, y = 0, yend = peak_known),
@@ -81,11 +91,13 @@ p_final <- p_base +
   geom_segment(aes(x = median_cup,   xend = median_cup,   y = 0, yend = -peak_cup),
                colour = "black", linewidth = 1) +
   annotate("text", x = median_known * label_shift, y = 0.45 * peak_known,
-           label = round(median_known, 1), fontface = "bold", size = 5,
-           hjust = 1) +
+           label = sprintf("%.1f", lab_known), fontface = "bold", size = 5, hjust = 1) +
   annotate("text", x = median_cup * label_shift, y = -0.45 * peak_cup,
-           label = round(median_cup, 1), fontface = "bold", size = 5,
-           hjust = 1)
+           label = sprintf("%.1f", lab_cup), fontface = "bold", size = 5, hjust = 1)
+
+
+p_final
+
 
 # Save
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
