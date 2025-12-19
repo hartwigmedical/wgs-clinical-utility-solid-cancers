@@ -70,11 +70,11 @@ p_base <- ggplot() +
 
 b <- ggplot_build(p_base)
 peak_known <- max(b$data[[1]]$y, na.rm = TRUE)
-peak_cup   <- abs(min(b$data[[2]]$y, na.rm = TRUE))
+peak_cup   <- abs(min(b$data[[2]]$y, na.rm = TRUE)) 
 
-# Combine
 label_shift <- 0.90
 
+# Combine
 p_final <- p_base +
   geom_segment(aes(x = median_known, xend = median_known, y = 0, yend = peak_known),
                colour = "black", linewidth = 1) +
