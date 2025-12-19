@@ -20,7 +20,7 @@ library(readr)
 # Input
 df <- read_excel(
   path  = "~/Documents/Post-WIDE/SourceData_Main+ED.xlsx",
-  sheet = "Fig2A"
+  sheet = "Fig2AB"
 )
 
 # Define
