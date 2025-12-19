@@ -71,7 +71,9 @@ p <- ggplot(plot_data, aes(x = BiomarkerGroup, y = n, fill = `Diagnosis category
 # Save
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
-ggsave("output/Figure2B_actionability_counts.pdf", 
-        width = 6.5, 
-        height = 5.5, 
-        units = "in")
+ggsave(
+  "output/Figure2B_actionability_counts.pdf", 
+   width = 6.5, 
+   height = 5.5, 
+   units = "in"
+  )
