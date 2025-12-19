@@ -1,13 +1,28 @@
-#
-
-
-
+# figure2D_actionability_tumour_types.R
+# Purpose: Generate Figure 2D: fraction of patients harbouring actionable biomarkers per tumour type (stacked bars, percentages summing to 100% per tumour type; includes total N labels below bars).
+# Environment:
+#   R version 4.4.2
+#   RStudio 2024.09.1+394
+# Required packages:
+#   readxl  (v1.4.5)
+#   dplyr   (v1.1.4)
+#   ggplot2 (v3.5.2)
+#   tidyr   (v1.3.1)
+# Input:
+#   data/SourceData_Main+ED.xlsx
+#   Sheet: "Fig2D"
+#   - Tumour types with <5 patients are excluded from visualisation
+#   - "All known primary" and "All unknown primary" summary bars are constructed from tumour types in the table
+# Output:
+#   output/Figure2D_actionability_tumour_types.pdf
+#   (Final panel assembly and addition of separate legend were performed in Inkscape)
 
 library(dplyr)
 library(ggplot2)
 library(tidyr)
 library(readxl)
 
+# Input
 df <- read_excel(
   "~/Documents/Post-WIDE/Supplementary Tables 1-7.xlsx", 
    sheet = "Fig2D")
@@ -125,7 +140,7 @@ ggplot(df_long, aes(x = Tumour_type, y = Percentage, fill = FillKey)) +
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
-  filename = "output/Figure2D_actionability_cancer_types.pdf",
+  filename = "output/Figure2D_actionability_tumour_types.pdf",
   width = 12.5,
   height = 6,
   units = "in"
