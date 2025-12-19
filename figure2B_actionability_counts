@@ -19,7 +19,7 @@ library(readr)
 
 # Input
 df <- read_excel(
-  path  = "~/Documents/Post-WIDE/SourceData_Main+ED.xlsx",
+  path  = "data/SourceData_Main+ED.xlsx",
   sheet = "Fig2AB"
 )
 
@@ -65,8 +65,6 @@ p <- ggplot(plot_data, aes(x = BiomarkerGroup, y = n, fill = `Diagnosis category
     panel.grid.major.x = element_blank(),
     legend.position = "none"
   )
-
-p
 
 # Save
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
