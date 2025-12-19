@@ -7,7 +7,12 @@
 #   dplyr   (1.1.4)
 #   tidyr   (1.3.1)
 #   ggplot2 (3.5.2)
-# Input: 
+# Input:
+#   data/SourceData_Main+ED.xlsx, sheet "Fig4"
+# Output:
+#   A: output/figure4_panelA_known.pdf
+#   B: output/figure4_panelB_cup.pdf
+#   (Panels were combined into one file in Inkscape, and labels were added manually based on the generated counts)
 
 library(readxl)
 library(dplyr)
@@ -117,11 +122,11 @@ ggsave(
   "output/figure4_panelA_known.pdf", 
   p_known, 
   width = 10, 
-  height = 1.5, 
+  height = 2, 
   units = "in")
 
 ggsave("output/figure4_panelB_cup.pdf",   
   p_cup,   
   width = 10, 
-  height = 1.5, 
+  height = 2, 
   units = "in")
