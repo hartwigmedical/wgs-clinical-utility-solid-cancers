@@ -8,7 +8,9 @@ library(ggplot2)
 library(tidyr)
 library(readxl)
 
-df <- read_excel("~/Documents/Post-WIDE/Supplementary Tables 1-7.xlsx", sheet = "Supp T2A. Actionability")
+df <- read_excel(
+  "~/Documents/Post-WIDE/Supplementary Tables 1-7.xlsx", 
+   sheet = "Fig2D")
 
 # Define
 df <- df %>%
