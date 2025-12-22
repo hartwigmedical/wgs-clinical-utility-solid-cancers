@@ -112,7 +112,6 @@ km_plot$table <- km_plot$table +
     axis.ticks = element_blank(),
     axis.text.x = element_blank(),
     axis.title.x = element_blank(),
-    plot.margin = unit(c(5.5, 5.5, 5.5, -20), "pt"),
     text = element_text(color = "black")
   ) +
   coord_cartesian(clip = "off")
