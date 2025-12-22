@@ -129,6 +129,13 @@ km_plot$plot <- km_plot$plot +
     aes(x = x, xend = x, y = 0, yend = y, colour = strata),
     linetype = "dotted",
     inherit.aes = FALSE
+    +
+  geom_point(
+    data = medians_df,
+    aes(x = x, y = y_orb, colour = strata),
+    size = 5,
+    inherit.aes = FALSE,
+    show.legend = FALSE
   ) +
   geom_text(
     data = medians_df,
