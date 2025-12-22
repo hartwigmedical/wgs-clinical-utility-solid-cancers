@@ -5,6 +5,14 @@
 # Output: output/Figure5C_pretx0_curve.pdf + _risktable.pdf (idem for pret1 and pret2plus)
 #         output/Figure5C_combined_curves.pdf  (CURVES ONLY; risk tables separate)
 
+# figure5C_pretreatment_stratified.R
+# Purpose: Figure 5C — OS for actionable biomarkers >0, targeted pretreatment = NO,
+#          stratified by pretreatments (0 / 1 / 2+), with groups BIT–Rx– / BIT–Rx+ / BIT+.
+# Input:  data/SourceData_Main+ED.xlsx, sheet "Fig5"
+# Output:
+#   output/Figure5C_pretx0_curve.pdf + _risktable.pdf (idem for pret1 and pret2plus)
+#   output/Figure5C_combined_curves.pdf  (CURVES + one legend centered under middle panel)
+
 library(readxl)
 library(dplyr)
 library(survival)
@@ -12,18 +20,25 @@ library(survminer)
 library(ggplot2)
 library(patchwork)
 
+# ---- helpers ----
 hr_line <- function(model, coef_name, label) {
   s  <- summary(model)
   hr <- s$coefficients[coef_name, "exp(coef)"]
   ci <- s$conf.int[coef_name, c("lower .95", "upper .95")]
-  paste0(label, ": HR = ",
-         sprintf("%.2f", hr),
-         " (", sprintf("%.2f", ci[1]), "–", sprintf("%.2f", ci[2]), ")")
+  paste0(
+    label, ": HR = ",
+    sprintf("%.2f", hr),
+    " (", sprintf("%.2f", ci[1]), "–", sprintf("%.2f", ci[2]), ")"
+  )
 }
 
+ceil_day <- function(x) ifelse(is.na(x), NA_real_, ceiling(x - 1e-12))
+
 make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_y = TRUE) {
+  
   fit <- survfit(Surv(Overall_survival_days, Event) ~ KM_Group, data = df_sub)
   
+  # HR text
   df1 <- df_sub %>% mutate(KM_Group = relevel(KM_Group, ref = "BIT–Rx–"))
   model1 <- coxph(Surv(Overall_survival_days, Event) ~ KM_Group, data = df1)
   txt_ab <- hr_line(model1, "KM_GroupBIT–Rx+", "BIT–Rx+ vs BIT–Rx–")
@@ -49,9 +64,10 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
     ggtheme = theme_minimal(base_size = 12),
     xlab = "Days since WGS result",
     ylab = "Overall survival probability",
-    legend = "right"
+    legend = "bottom" # will be overridden below
   )
   
+  # Risk table styling (saved separately)
   km_plot$table <- km_plot$table +
     theme_minimal(base_size = 10) +
     theme(
@@ -63,17 +79,19 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
       text = element_text(color = "black")
     )
   
+  # Curve plot base styling
   km_plot$plot <- km_plot$plot +
     theme(
       panel.grid.minor = element_blank(),
       legend.key = element_blank(),
-      legend.position = "none"
+      legend.position = if (show_legend) "bottom" else "none"
     ) +
     labs(title = paste0("Pretreatments: ", pret_label)) +
     annotate("text", x = 300, y = 0.94, label = txt_bc, hjust = 0, size = 4) +
     annotate("text", x = 300, y = 0.88, label = txt_ac, hjust = 0, size = 4) +
     annotate("text", x = 300, y = 0.82, label = txt_ab, hjust = 0, size = 4)
   
+  # Remove y-axis for middle/right panels
   if (!show_y) {
     km_plot$plot <- km_plot$plot +
       theme(
@@ -81,71 +99,71 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
         axis.text.y  = element_blank(),
         axis.ticks.y = element_blank()
       )
-    
-    ceil_day <- function(x) ifelse(is.na(x), NA_real_, ceiling(x - 1e-12))
-    
-    curve_palette <- c(
-      "BIT–Rx–" = "#fee090",
-      "BIT–Rx+" = "#fdb863",
-      "BIT+"    = "#60bd68"
-    )
-    
-    med_annot <- surv_median(fit) %>%
-      dplyr::transmute(
-        strata = gsub("^KM_Group=", "", strata),
-        x      = median,
-        label  = ifelse(is.na(median), NA_character_, paste0(ceil_day(median), "d"))
-      ) %>%
-      dplyr::filter(!is.na(x), strata %in% levels(df_sub$KM_Group)) %>%
-      dplyr::mutate(strata = factor(strata, levels = levels(df_sub$KM_Group)),
-                    x_orb = x + dplyr::case_when(
-                      strata == "BIT–Rx–" ~ -8,
-                      strata == "BIT–Rx+" ~  0,
-                      strata == "BIT+"    ~  8,
-                      TRUE ~ 0
-                    )
-      ) %>%
-      dplyr::arrange(x_orb)
-    
-    y_median <- 0.50
-    y_orb    <- 0.001
-    y_label  <- 0.04
-    
-    km_plot$plot <- km_plot$plot +
-      geom_segment(
-        data = med_annot,
-        aes(x = 0, xend = x, y = y_median, yend = y_median),
-        linetype = "dotted", colour = "black",
-        inherit.aes = FALSE
-      ) +
-      geom_segment(
-        data = med_annot,
-        aes(x = x, xend = x, y = 0, yend = y_median),
-        linetype = "dotted", colour = "black",
-        inherit.aes = FALSE
-      ) +
-      geom_point(
-        data = med_annot,
-        aes(x = x, y = y_orb, fill = strata),
-        shape = 21, size = 3.6, stroke = 0,
-        inherit.aes = FALSE,
-        show.legend = FALSE
-      ) +
-      scale_fill_manual(values = curve_palette, guide = "none") +
-      geom_text(
-        data = med_annot,
-        aes(x = x + 20, y = y_label, label = label),
-        colour = "black",
-        fontface = "italic",
-        angle = 45,
-        hjust = 0,
-        size = 3.8,
-        family = "Helvetica",
-        inherit.aes = FALSE
-      )
-    
   }
   
+  # ---- Median guide lines + x-axis orbs + median labels (ALWAYS) ----
+  meds <- surv_median(fit)
+  strata_col <- if ("strata" %in% names(meds)) "strata" else "group"
+  
+  med_annot <- meds %>%
+    transmute(
+      strata = gsub("^KM_Group=", "", .data[[strata_col]]),
+      x      = median,
+      label  = ifelse(is.na(median), NA_character_, paste0(ceil_day(median), "d"))
+    ) %>%
+    filter(!is.na(x), strata %in% levels(df_sub$KM_Group)) %>%
+    mutate(
+      strata = factor(strata, levels = levels(df_sub$KM_Group)),
+      x_orb = x
+    ) %>%
+    arrange(x_orb)
+  
+  y_median <- 0.50
+  y_orb    <- 0.00  
+  y_label  <- 0.06
+ 
+  orb_cols <- c("BIT–Rx–" = "#fee090", "BIT–Rx+" = "#fdb863", "BIT+" = "#60bd68")
+   
+  km_plot$plot <- km_plot$plot +
+    coord_cartesian(clip = "off") +
+    geom_segment(
+      data = med_annot,
+      aes(x = 0, xend = x, y = y_median, yend = y_median),
+      inherit.aes = FALSE,
+      linetype = "dotted",
+      colour = "black",
+      linewidth = 0.6,
+      show.legend = FALSE
+    ) +
+    geom_segment(
+      data = med_annot,
+      aes(x = x, xend = x, y = 0, yend = y_median),
+      inherit.aes = FALSE,
+      linetype = "dotted",
+      colour = "black",
+      linewidth = 0.6,
+      show.legend = FALSE
+    ) +
+    geom_point(
+      data = med_annot,
+      aes(x = x, y = y_orb, colour = strata),
+      inherit.aes = FALSE,
+      shape = 16,        
+      size = 5,
+      show.legend = FALSE
+    ) +
+    geom_text(
+      data = med_annot,
+      aes(x = x + 20, y = y_label, label = label),
+      inherit.aes = FALSE,
+      colour = "black",
+      fontface = "italic",
+      angle = 45,
+      hjust = 0,
+      size = 3.6,
+      family = "Helvetica",
+      show.legend = FALSE
+    )
   km_plot$plot
 }
 
@@ -184,22 +202,31 @@ df <- read_excel(
   ) %>%
   filter(!is.na(Pretreatment_Group), !is.na(KM_Group))
 
-p0 <- make_km_one(df %>% filter(Pretreatment_Group == "0"),  "0",  "Figure5C_pretx0", show_y = TRUE)
-p1 <- make_km_one(df %>% filter(Pretreatment_Group == "1"),  "1",  "Figure5C_pretx1", show_y = FALSE)
-p2 <- make_km_one(df %>% filter(Pretreatment_Group == "2+"), "2+", "Figure5C_pretx2plus", show_y = FALSE)
+p0 <- make_km_one(df %>% filter(Pretreatment_Group == "0"),  "0",  "Figure5C_pretx0",
+                  show_legend = FALSE, show_y = TRUE)
 
-combined <- (p0 | p1 | p2) +
-  plot_layout(guides = "collect") &
+p1 <- make_km_one(df %>% filter(Pretreatment_Group == "1"),  "1",  "Figure5C_pretx1",
+                  show_legend = TRUE,  show_y = FALSE)
+
+p2 <- make_km_one(df %>% filter(Pretreatment_Group == "2+"), "2+", "Figure5C_pretx2plus",
+                  show_legend = FALSE, show_y = FALSE)
+
+combined <- (p0 | p1 | p2) /
+  (plot_spacer() | guide_area() | plot_spacer()) +
+  plot_layout(heights = c(1, 0.14), guides = "collect") &
   theme(
     legend.position = "bottom",
     legend.box.just = "center",
     legend.justification = "center"
   )
 
-combined
-
+# Save
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
-ggsave("output/Figure5C_combined_curves.pdf", combined,
-       width = 13.5, height = 5, units = "in")
+      
+ggsave(
+  "output/Figure5C_combined_curves.pdf", 
+  combined,
+  width = 13.5, 
+  height = 5, 
+  units = "in"
 )
-
