@@ -2,23 +2,23 @@
 # Environment:
 #   R version 4.4.2
 #   RStudio 2024.09.1+394
-# Required packages (tested):
-#   ggplot2 (vX.X.X)
-#   dplyr   (vX.X.X)
-#   readxl  (vX.X.X)
+# Required packages :
+#   readxl     (1.4.5) 
+#   dplyr      (1.1.4)
+#   ggplot2    (3.5.2)
 # Input:
 #   data/SourceData_Main+ED.xlsx
-#   Sheet: "EDFigX_workingdays"
+#   Sheet: "ED1"
 # Output:
-#   output/EDFigX_workingdays_histogram.pdf  (vector)
+#   output/ED1_tat_histogram.pdf  
 
-library(ggplot2)
-library(dplyr)
 library(readxl)
+library(dplyr)
+library(ggplot2)
 
 # Input
 df <- read_excel(
-  path  = "~/Documents/Post-WIDE/SourceData_Main+ED.xlsx",
+  path  = "data/SourceData_Main+ED.xlsx",
   sheet = "ED1"
 ) %>%
   mutate(
@@ -26,8 +26,6 @@ df <- read_excel(
     N_samples    = as.integer(N_samples),
     Group = ifelse(Working_days <= 10, "<=10 working days", ">10 working days")
   )
-
-stopifnot(all(c("Working_days", "N_samples") %in% names(df)))
 
 # Plot
 p <- ggplot(df, aes(x = factor(Working_days), y = N_samples, fill = Group)) +
@@ -55,7 +53,6 @@ p <- ggplot(df, aes(x = factor(Working_days), y = N_samples, fill = Group)) +
     axis.title.y = element_text(size = 12, family = "Helvetica", angle = 0, vjust = 0.85),
     plot.margin = margin(5.5, 10, 5.5, 5.5, unit = "pt")
   ) +
-  # give headroom for labels
   expand_limits(y = max(df$N_samples, na.rm = TRUE) * 1.12)
 
 print(p)
