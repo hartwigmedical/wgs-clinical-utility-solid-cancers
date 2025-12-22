@@ -1,4 +1,3 @@
-
 # figure5C_pretreatment_stratified.R
 # Purpose: Figure 5C — OS for actionable biomarkers >0, targeted pretreatment = NO,
 #          stratified by pretreatments (0 / 1 / 2+), with groups Rx– / Rx+ / TargetRx+.
@@ -13,7 +12,6 @@ library(survminer)
 library(ggplot2)
 library(patchwork)
 
-# ---- helpers ----
 hr_line <- function(model, coef_name, label) {
   s  <- summary(model)
   hr <- s$coefficients[coef_name, "exp(coef)"]
@@ -83,6 +81,69 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
         axis.text.y  = element_blank(),
         axis.ticks.y = element_blank()
       )
+    
+    ceil_day <- function(x) ifelse(is.na(x), NA_real_, ceiling(x - 1e-12))
+    
+    curve_palette <- c(
+      "BIT–Rx–" = "#fee090",
+      "BIT–Rx+" = "#fdb863",
+      "BIT+"    = "#60bd68"
+    )
+    
+    med_annot <- surv_median(fit) %>%
+      dplyr::transmute(
+        strata = gsub("^KM_Group=", "", strata),
+        x      = median,
+        label  = ifelse(is.na(median), NA_character_, paste0(ceil_day(median), "d"))
+      ) %>%
+      dplyr::filter(!is.na(x), strata %in% levels(df_sub$KM_Group)) %>%
+      dplyr::mutate(strata = factor(strata, levels = levels(df_sub$KM_Group)),
+                    x_orb = x + dplyr::case_when(
+                      strata == "BIT–Rx–" ~ -8,
+                      strata == "BIT–Rx+" ~  0,
+                      strata == "BIT+"    ~  8,
+                      TRUE ~ 0
+                    )
+      ) %>%
+      dplyr::arrange(x_orb)
+    
+    y_median <- 0.50
+    y_orb    <- 0.001
+    y_label  <- 0.04
+    
+    km_plot$plot <- km_plot$plot +
+      geom_segment(
+        data = med_annot,
+        aes(x = 0, xend = x, y = y_median, yend = y_median),
+        linetype = "dotted", colour = "black",
+        inherit.aes = FALSE
+      ) +
+      geom_segment(
+        data = med_annot,
+        aes(x = x, xend = x, y = 0, yend = y_median),
+        linetype = "dotted", colour = "black",
+        inherit.aes = FALSE
+      ) +
+      geom_point(
+        data = med_annot,
+        aes(x = x, y = y_orb, fill = strata),
+        shape = 21, size = 3.6, stroke = 0,
+        inherit.aes = FALSE,
+        show.legend = FALSE
+      ) +
+      scale_fill_manual(values = curve_palette, guide = "none") +
+      geom_text(
+        data = med_annot,
+        aes(x = x + 20, y = y_label, label = label),
+        colour = "black",
+        fontface = "italic",
+        angle = 45,
+        hjust = 0,
+        size = 3.8,
+        family = "Helvetica",
+        inherit.aes = FALSE
+      )
+    
   }
   
   km_plot$plot
@@ -123,7 +184,6 @@ df <- read_excel(
   ) %>%
   filter(!is.na(Pretreatment_Group), !is.na(KM_Group))
 
-# ---- run 3 strata ----
 p0 <- make_km_one(df %>% filter(Pretreatment_Group == "0"),  "0",  "Figure5C_pretx0", show_y = TRUE)
 p1 <- make_km_one(df %>% filter(Pretreatment_Group == "1"),  "1",  "Figure5C_pretx1", show_y = FALSE)
 p2 <- make_km_one(df %>% filter(Pretreatment_Group == "2+"), "2+", "Figure5C_pretx2plus", show_y = FALSE)
@@ -141,3 +201,5 @@ combined
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 ggsave("output/Figure5C_combined_curves.pdf", combined,
        width = 13.5, height = 5, units = "in")
+)
+
