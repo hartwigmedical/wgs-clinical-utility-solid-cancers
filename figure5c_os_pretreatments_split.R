@@ -1,17 +1,10 @@
-# figure5C_pretreatment_stratified.R
-# Purpose: Figure 5C — OS for actionable biomarkers >0, targeted pretreatment = NO,
-#          stratified by pretreatments (0 / 1 / 2+), with groups Rx– / Rx+ / TargetRx+.
-# Input:  data/SourceData_Main+ED.xlsx, sheet "Fig5"
-# Output: output/Figure5C_pretx0_curve.pdf + _risktable.pdf (idem for pret1 and pret2plus)
-#         output/Figure5C_combined_curves.pdf  (CURVES ONLY; risk tables separate)
-
-# figure5C_pretreatment_stratified.R
-# Purpose: Figure 5C — OS for actionable biomarkers >0, targeted pretreatment = NO,
+# figure5C_os_pretreatments_split.R
+# Purpose:  OS for actionable biomarkers >0, targeted pretreatment = NO,
 #          stratified by pretreatments (0 / 1 / 2+), with groups BIT–Rx– / BIT–Rx+ / BIT+.
 # Input:  data/SourceData_Main+ED.xlsx, sheet "Fig5"
 # Output:
-#   output/Figure5C_pretx0_curve.pdf + _risktable.pdf (idem for pret1 and pret2plus)
-#   output/Figure5C_combined_curves.pdf  (CURVES + one legend centered under middle panel)
+#   output/Figure5C_os_pretreatments_split.pdf
+# Notes: 
 
 library(readxl)
 library(dplyr)
@@ -20,7 +13,6 @@ library(survminer)
 library(ggplot2)
 library(patchwork)
 
-# ---- helpers ----
 hr_line <- function(model, coef_name, label) {
   s  <- summary(model)
   hr <- s$coefficients[coef_name, "exp(coef)"]
@@ -38,7 +30,6 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
   
   fit <- survfit(Surv(Overall_survival_days, Event) ~ KM_Group, data = df_sub)
   
-  # HR text
   df1 <- df_sub %>% mutate(KM_Group = relevel(KM_Group, ref = "BIT–Rx–"))
   model1 <- coxph(Surv(Overall_survival_days, Event) ~ KM_Group, data = df1)
   txt_ab <- hr_line(model1, "KM_GroupBIT–Rx+", "BIT–Rx+ vs BIT–Rx–")
@@ -64,10 +55,9 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
     ggtheme = theme_minimal(base_size = 12),
     xlab = "Days since WGS result",
     ylab = "Overall survival probability",
-    legend = "bottom" # will be overridden below
+    legend = "bottom" 
   )
   
-  # Risk table styling (saved separately)
   km_plot$table <- km_plot$table +
     theme_minimal(base_size = 10) +
     theme(
@@ -79,7 +69,6 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
       text = element_text(color = "black")
     )
   
-  # Curve plot base styling
   km_plot$plot <- km_plot$plot +
     theme(
       panel.grid.minor = element_blank(),
@@ -91,7 +80,6 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
     annotate("text", x = 300, y = 0.88, label = txt_ac, hjust = 0, size = 4) +
     annotate("text", x = 300, y = 0.82, label = txt_ab, hjust = 0, size = 4)
   
-  # Remove y-axis for middle/right panels
   if (!show_y) {
     km_plot$plot <- km_plot$plot +
       theme(
@@ -101,7 +89,7 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
       )
   }
   
-  # ---- Median guide lines + x-axis orbs + median labels (ALWAYS) ----
+# Statistics: medians
   meds <- surv_median(fit)
   strata_col <- if ("strata" %in% names(meds)) "strata" else "group"
   
@@ -117,7 +105,8 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
       x_orb = x
     ) %>%
     arrange(x_orb)
-  
+
+# Aesthetics
   y_median <- 0.50
   y_orb    <- 0.00  
   y_label  <- 0.06
@@ -132,7 +121,7 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
       inherit.aes = FALSE,
       linetype = "dotted",
       colour = "black",
-      linewidth = 0.6,
+      linewidth = 0.4,
       show.legend = FALSE
     ) +
     geom_segment(
@@ -141,7 +130,7 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
       inherit.aes = FALSE,
       linetype = "dotted",
       colour = "black",
-      linewidth = 0.6,
+      linewidth = 0.4,
       show.legend = FALSE
     ) +
     geom_point(
@@ -167,8 +156,9 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
   km_plot$plot
 }
 
+# Input
 df <- read_excel(
-  path  = "~/Documents/Post-WIDE/SourceData_Main+ED.xlsx",
+  path  = "data/SourceData_Main+ED.xlsx",
   sheet = "Fig5"
 ) %>%
   mutate(
@@ -202,6 +192,7 @@ df <- read_excel(
   ) %>%
   filter(!is.na(Pretreatment_Group), !is.na(KM_Group))
 
+# Plot
 p0 <- make_km_one(df %>% filter(Pretreatment_Group == "0"),  "0",  "Figure5C_pretx0",
                   show_legend = FALSE, show_y = TRUE)
 
@@ -213,7 +204,7 @@ p2 <- make_km_one(df %>% filter(Pretreatment_Group == "2+"), "2+", "Figure5C_pre
 
 combined <- (p0 | p1 | p2) /
   (plot_spacer() | guide_area() | plot_spacer()) +
-  plot_layout(heights = c(1, 0.14), guides = "collect") &
+  plot_layout(heights = c(1.5, 0), guides = "collect") &
   theme(
     legend.position = "bottom",
     legend.box.just = "center",
@@ -224,9 +215,9 @@ combined <- (p0 | p1 | p2) /
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
       
 ggsave(
-  "output/Figure5C_combined_curves.pdf", 
+  "output/Figure5C_os_pretreatments_split.pdf", 
   combined,
-  width = 13.5, 
-  height = 5, 
+  width = 13.5,
+  height = 5,
   units = "in"
 )
