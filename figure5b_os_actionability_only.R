@@ -1,4 +1,4 @@
-# figure5B_os_actionability_split.R
+# figure5B_os_actionable_only.R
 # Environment: R 4.4.2; RStudio 2024.09.1+394
 # Required packages: 
 #    readxl     (1.4.5) 
@@ -9,8 +9,8 @@
 # Input:
 #    data/SourceData_Main+ED.xlsx, sheet: Fig5
 # Output:
-#     output/figure5b_overall_survival.pdf 
-#     output/figure5b_overall_survival_risktable.pdf 
+#     output/figure5b_os_actionable_only.pdf 
+#     output/figure5b_os_actionable_only_risktable.pdf 
 # Notes on figure assembly:
 #     The curve and risk table were exported separately as vector PDFs and assembled into the final multi-panel figure in Inkscape.
 
@@ -150,4 +150,15 @@ km_plot$plot <- km_plot$plot +
 
 # Save
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
-ggsave("output/Figure5B_overall_survival.pdf", km_plot$plot, width = 7.0, height = 5.0, units = "in")
+ggsave(
+  "output/Figure5B_os_actionable_only.pdf", 
+  km_plot$plot, 
+  width = 7.0, 
+  height = 5.0, 
+  units = "in")
+ggsave(
+  "output/Figure5B_os_actionable_only_risktable.pdf", 
+  km_plot$table, 
+  width = 7.0, 
+  height = 5.0, 
+  units = "in")
