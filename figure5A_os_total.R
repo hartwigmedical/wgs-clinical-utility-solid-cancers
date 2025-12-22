@@ -13,7 +13,6 @@
 #     output/figure5a_overall_survival_risktable.pdf 
 # Notes on figure assembly:
 #     The curve and risk table were exported separately as vector PDFs and assembled into the final multi-panel figure in Inkscape.
-#     Inkscape edits were layout-only (alignment and styling). No underlying data or statistical results were altered.
 
 library(readxl)
 library(dplyr)
