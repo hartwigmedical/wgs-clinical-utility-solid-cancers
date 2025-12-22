@@ -7,8 +7,7 @@
 #   dplyr      (1.1.4)
 #   ggplot2    (3.5.2)
 # Input:
-#   data/SourceData_Main+ED.xlsx
-#   Sheet: "ED1"
+#   data/SourceData_Main+ED.xlsx, sheet: ED1
 # Output:
 #   output/ED1_tat_histogram.pdf  
 
