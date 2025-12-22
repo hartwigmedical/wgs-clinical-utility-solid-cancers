@@ -20,6 +20,8 @@ library(survival)
 library(survminer)
 library(ggplot2)
 
+ceil_day <- function(x) ceiling(x - 1e-6)
+
 # Input
 df <- read_excel(
   path  = "data/SourceData_Main+ED.xlsx",
@@ -45,8 +47,6 @@ fit <- survfit(Surv(Overall_survival_days, Event) ~ KM_Group, data = df)
 
 # Statstics: Medians
 meds <- surv_median(fit)
-
-ceil_day <- function(x) ceiling(x - 1e-6)
 
 medians_df <- meds %>%
   transmute(
