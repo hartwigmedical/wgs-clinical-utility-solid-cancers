@@ -29,56 +29,51 @@ library(scales)
 # Input
 df <- read_excel(
   "data/SourceData_Main+ED.xlsx", 
-  sheet = "Fig3") %>%
+  sheet = "Fig3") 
+  
+
+df <- read_excel(file, sheet = sheet) %>%
   mutate(
-    # normalize strings
-    `WGS-based CUP prediction algorithm solution` = str_squish(as.character(`WGS-based CUP prediction algorithm solution`)),
-    `WGS-informed treatment` = str_squish(as.character(`WGS-informed treatment`)),
-    `In-house follow-up for CUP treatment analysis` = toupper(str_squish(as.character(`In-house follow-up for CUP treatment analysis`)))
+    CUP_solution         = str_squish(as.character(CUP_solution)),
+    Post_CUP_diagnosis   = str_squish(as.character(Post_CUP_diagnosis)),
+    WGS_informed_treatment = str_squish(as.character(WGS_informed_treatment)),
+    Followup_CUP         = toupper(str_squish(as.character(Followup_CUP)))
   )
 
 # Define
 df <- df %>%
   mutate(
+    CUP_solution_std = str_remove(CUP_solution, "\\.+$"),
     solution_group = case_when(
-      str_detect(`WGS-based CUP prediction algorithm solution`, "^Case not fully solved") ~ "Not completely solved",
-      str_detect(`WGS-based CUP prediction algorithm solution`, "^Diagnosis indicated with lower certainty") ~ "Aided CUP solution",
-      str_detect(`WGS-based CUP prediction algorithm solution`, "^Diagnosis given with high certainty") ~ "CUP definitively solved",
+      CUP_solution_std == "Case not fully solved by WGS" ~ "Not completely solved",
+      CUP_solution_std == "Diagnosis indicated with lower certainty by WGS" ~ "Aided CUP solution",
+      CUP_solution_std == "Diagnosis given with high certainty" ~ "CUP definitively solved",
       TRUE ~ NA_character_
+    ),
+    solution_group = factor(
+      solution_group,
+      levels = c("Not completely solved", "Aided CUP solution", "CUP definitively solved")
     )
   ) %>%
   filter(!is.na(solution_group))
 
-solution_levels <- c("Not completely solved", "Aided CUP solution", "CUP definitively solved")
-df$solution_group <- factor(df$solution_group, levels = solution_levels)
-
-# Define
-treat_levels <- c("No treatment data", "No systemic treatment", "CUP regimen",
-                  "Non-targeted", "Standard care", "Exp. trial", "Reimbursed")
+treat_levels <- c("No treatment data", "No systemic treatment", "CUP regimen", "Non-targeted",
+  "Standard care", "Exp. trial", "Reimbursed")
 
 df <- df %>%
   mutate(
-    wgs_treat = str_squish(as.character(`WGS-informed treatment`)),
-    fu = toupper(str_squish(as.character(`In-house follow-up for CUP treatment analysis`))),
     treatment_cat = case_when(
-      !is.na(wgs_treat) & wgs_treat != "" & !str_detect(str_to_lower(wgs_treat), "^no treatment$") ~ case_when(
-        str_detect(str_to_lower(wgs_treat), "cup regimen") ~ "CUP regimen",
-        str_detect(str_to_lower(wgs_treat), "biomarker-informed reimbursed") ~ "Reimbursed",
-        str_detect(str_to_lower(wgs_treat), "biomarker-informed experimental") ~ "Exp. trial",
-        str_detect(str_to_lower(wgs_treat), "non-biomarker-informed standard-of-care") ~ "Standard care",
-        str_detect(str_to_lower(wgs_treat), "non-biomarker-informed experimental") ~ "Non-targeted",
-        TRUE ~ "Non-targeted"
-      ),
-      (is.na(wgs_treat) | wgs_treat == "" | str_detect(str_to_lower(wgs_treat), "^no treatment$")) &
-        !is.na(fu) & fu == "YES" ~ "No systemic treatment",
-      (is.na(wgs_treat) | wgs_treat == "" | str_detect(str_to_lower(wgs_treat), "^no treatment$")) &
-        (is.na(fu) | fu != "YES") ~ "No treatment data", 
-      TRUE ~ "No treatment data"
+      # Exacte categorieën (zoals jij aangeeft dat ze in de sheet staan)
+      WGS_informed_treatment == "Biomarker-informed reimbursed treatment" ~ "Reimbursed",
+      WGS_informed_treatment == "Biomarker-informed experimental treatment" ~ "Exp. trial",
+      WGS_informed_treatment == "Non-biomarker-informed standard-of-care treatment" ~ "Standard care",
+      WGS_informed_treatment == "Non-biomarker-informed experimental treatment" ~ "Non-targeted",
+      WGS_informed_treatment == "CUP regimen" ~ "CUP regimen",
+      WGS_informed_treatment == "No treatment" & Followup_CUP == "YES" ~ "No systemic treatment",
+      WGS_informed_treatment == "No treatment" & Followup_CUP != "YES" ~ "No treatment data",
+      TRUE ~ NA_character_
     ),
-    treatment_cat = factor(treatment_cat, levels = c(
-      "No treatment data", "No systemic treatment", "CUP regimen",
-      "Non-targeted", "Standard care", "Exp. trial", "Reimbursed"
-    ))
+    treatment_cat = factor(treatment_cat, levels = treat_levels)
   )
 
 pie_data <- df %>%
@@ -207,6 +202,7 @@ if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
   filename = "output/figure3_cup_summary.pdf",
+  final_plot,
   width = 7.50,
   height = 6.60,
   units = "in"
