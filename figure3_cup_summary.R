@@ -166,10 +166,10 @@ legend_bar <- get_legend(
       labels = c(
         "No treatment data" = "No treatment data",
         "No systemic treatment" = "No systemic treatment",
-        "Non-targeted" = "Non-targeted experimental trial",
-        "Standard care" = "Non-targeted standard-of-care",
-        "Exp. trial" = "Targeted experimental trial",
-        "Reimbursed" = "Targeted reimbursed treatment",
+        "Non-targeted" = "Non-biomarker-informed experimental treatment",
+        "Standard care" = "Non-biomarker-informed standard-of-care treatment",
+        "Exp. trial" = "Biomarker-informed experimental treatment",
+        "Reimbursed" = "Biomarker-informed reimbursed treatment",
         "CUP regimen" = "CUP regimen"
       )
     ) +
@@ -184,18 +184,19 @@ legend_bar <- get_legend(
 
 # Combine
 pie_with_frame <- ggdraw() +
-  draw_plot(pie_plot, x = -0.05, y = 0.00, width = 1.1, height = 1.1) +
   theme(plot.background = element_rect(color = "grey90", fill = NA, linewidth = 1.5)) +
   draw_line(x = c(0.1, -0.05), y = c(0.76, 0.82), color = "lightgrey", linetype = "dashed", size = 0.7) +
   draw_line(x = c(0.95, 1.07), y = c(0.61, 0.61), color = "lightgrey", linetype = "dashed", size = 0.7) +
-  draw_line(x = c(0.35, -0.05), y = c(0.3, 0.2), color = "lightgrey", linetype = "dashed", size = 0.7)
+  draw_line(x = c(0.35, -0.05), y = c(0.335, 0.23), color = "lightgrey", linetype = "dashed", size = 0.7) +
+  draw_plot(pie_plot, x = -0.05, y = 0.00, width = 1.1, height = 1.1) 
 
 final_plot <- ggdraw() +
   draw_plot(pie_with_frame,     x = 0.2,   y = 0.21,  width = 0.4,  height = 0.59) +
   draw_plot(bar_plot_unsolved,  x = 0.098, y = 0.52,  width = 0.09, height = 0.3) +
   draw_plot(bar_plot_aided,     x = 0.098, y = 0.185, width = 0.09, height = 0.3) +
   draw_plot(bar_plot_solved,    x = 0.605, y = 0.52,  width = 0.09, height = 0.3) +
-  draw_plot(legend_bar,         x = 0.7,   y = 0.191, width = 0.2,  height = 0.3)
+  draw_plot(legend_bar,         x = 0.784,   y = 0.191, width = 0.2,  height = 0.3) +
+  theme(plot.margin = margin(t=0, r=1, b=0, l=0, unit = "in"))
 
 # Save
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
