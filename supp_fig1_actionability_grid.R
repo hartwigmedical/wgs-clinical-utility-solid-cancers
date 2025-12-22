@@ -17,7 +17,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
-df <- read_excel("~/Documents/Post-WIDE/SourceData_Main+Ed.xlsx", sheet = "ED2")
+df <- read_excel("data/SourceData_Main+Ed.xlsx", sheet = "SuppFig1")
 
 req <- c("Tumour_type","Biomarker","Experimental_indications","Reimbursed_indications")
 missing <- setdiff(req, names(df))
