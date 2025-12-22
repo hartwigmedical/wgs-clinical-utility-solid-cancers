@@ -1,5 +1,18 @@
-
-
+# ed3_vignette_cohort_bars.R
+# Environment:
+#   R version 4.4.2
+#   RStudio 2024.09.1+394
+# Required packages :
+#   readxl     (1.4.5) 
+#   dplyr      (1.1.4)
+#   tidyr      (1.3.1)
+#   stringr    (1.5.1)
+#   ggplot2    (3.5.2)
+#   scales     (1.3.0)
+# Input:
+#   data/SourceData_Main+ED.xlsx, sheet: ED5
+# Output:
+#   output/ed3_vignette_cohort_bars.pdf  
 
 library(readxl)
 library(dplyr)
@@ -128,7 +141,7 @@ p <- ggplot(tiles, aes(x = x, y = 0, fill = fill_pos)) +
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
-  "output/ed3_cohort_bars.pdf", 
+  "output/ed3_vignette_cohort_bars.pdf", 
   p, 
   width = 14, 
   height = 5, 
