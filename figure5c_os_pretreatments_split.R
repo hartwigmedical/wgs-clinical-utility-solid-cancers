@@ -1,10 +1,19 @@
 # figure5C_os_pretreatments_split.R
-# Purpose:  OS for actionable biomarkers >0, targeted pretreatment = NO,
-#          stratified by pretreatments (0 / 1 / 2+), with groups BIT–Rx– / BIT–Rx+ / BIT+.
-# Input:  data/SourceData_Main+ED.xlsx, sheet "Fig5"
+# Environment: R 4.4.2; RStudio 2024.09.1+394
+# Required packages: 
+#    readxl     (1.4.5) 
+#    dplyr      (1.1.4)
+#    survival   (3.7-0)
+#    survminer  (0.5.0)
+#    ggplot2    (3.5.2)
+#    patchwork  (1.3.0)
+# Input:  
+#    data/SourceData_Main+ED.xlsx 
+#    sheet "Fig5"
 # Output:
 #   output/Figure5C_os_pretreatments_split.pdf
-# Notes: 
+# Notes on figure assembly:
+#     The curves were assembled into the final multi-panel figure in Inkscape; only label positioning was adjusted manually for legibility
 
 library(readxl)
 library(dplyr)
