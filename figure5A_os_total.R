@@ -118,18 +118,13 @@ km_plot$table <- km_plot$table +
   coord_cartesian(clip = "off")
 
 km_plot$plot <- km_plot$plot +
+theme(panel.grid.minor = element_blank()) +
   geom_segment(
     data = medians_df,
-    aes(x = 0, xend = x, y = y, yend = y, colour = strata),
-    linetype = "dotted",
+    aes(x = x, xend = x, y = 0, yend = 0.5),
+    linetype = "dotted", colour = "black",
     inherit.aes = FALSE
   ) +
-  geom_segment(
-    data = medians_df,
-    aes(x = x, xend = x, y = 0, yend = y, colour = strata),
-    linetype = "dotted",
-    inherit.aes = FALSE
-    +
   geom_point(
     data = medians_df,
     aes(x = x, y = y_orb, colour = strata),
