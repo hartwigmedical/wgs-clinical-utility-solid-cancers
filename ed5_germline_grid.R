@@ -1,6 +1,19 @@
-library(ggplot2)
-library(dplyr)
+# ed5_germline_grid.R
+# Environment:
+#   R version 4.4.2
+#   RStudio 2024.09.1+394
+# Required packages :
+#   readxl     (1.4.5) 
+#   dplyr      (1.1.4)
+#   ggplot2    (3.5.2)
+# Input:
+#   data/SourceData_Main+ED.xlsx, sheet: ED5
+# Output:
+#   output/ED5_germline_grid.pdf  
+
 library(readxl)
+library(dplyr)
+library(ggplot2)
 
 # Input
 df <- read_excel("~/Documents/Post-WIDE/SourceData_Main+ED.xlsx", sheet = "ED5")
