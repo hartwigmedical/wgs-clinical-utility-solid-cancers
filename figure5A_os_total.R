@@ -20,7 +20,7 @@ library(survival)
 library(survminer)
 library(ggplot2)
 
-ceil_day <- function(x) ceiling(x - 1e-6)
+ceil_day <- function(x) ifelse(is.na(x), NA_real_, ceiling(x - 1e-12))
 
 # Input
 df <- read_excel(
