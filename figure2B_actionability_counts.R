@@ -9,8 +9,7 @@
 #   ggplot2 (v3.5.2)
 #   readr   (v2.1.5)
 # Input:
-#   data/SourceData_Main+ED.xlsx
-#   Sheet: "Fig2B"
+#   data/SourceData_Main+ED.xlsx, sheet: Fig2B
 # Output:
 #   output/Figure2B_actionability_counts.pdf (Final layout refinements were made in Inkscape before submission)
 
