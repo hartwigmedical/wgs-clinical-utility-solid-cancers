@@ -1,4 +1,4 @@
-# figure4AB_clinical_utility.R
+# figure4ab_clinical_utility.R
 # Purpose: Tile plots for clinical utility parameters per sample (Known vs CUP)
 # Environment:
 #   R 4.4.2; RStudio 2024.09.1+394
