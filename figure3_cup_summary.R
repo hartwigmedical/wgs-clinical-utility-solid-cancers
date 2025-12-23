@@ -12,7 +12,7 @@
 #   cowplot (1.1.3)
 #   scales  (1.3.0)
 # Input:
-#   data/SourceData_Main+ED.xlsx, sheet "Fig3"
+#   data/SourceData_Main+ED.xlsx, sheet: Fig3
 # Output:
 #   output/figure3_cup_summary.pdf
 # Notes:
