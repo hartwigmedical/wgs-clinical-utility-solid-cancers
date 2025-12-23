@@ -9,8 +9,7 @@
 #   tidyr     (v1.3.1)
 #   dplyr     (v1.1.4)
 # Input:
-#   data/SourceData_Main+ED.xlsx
-#   Sheet: "Fig2A"
+#   data/SourceData_Main+ED.xlsx, sheet: Fig2A
 # Output:
 #   output/Figure2A_actionability_boxplot.pdf
 #   (In the final figure, minor layout refinements and labels were adjusted in Inkscape before submission)
