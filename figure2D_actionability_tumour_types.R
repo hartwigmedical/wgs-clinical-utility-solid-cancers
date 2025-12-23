@@ -9,8 +9,7 @@
 #   ggplot2 (v3.5.2)
 #   tidyr   (v1.3.1)
 # Input:
-#   data/SourceData_Main+ED.xlsx
-#   Sheet: "Fig2D"
+#   data/SourceData_Main+ED.xlsx, sheet: Fig2D
 #   - Tumour types with <5 patients are excluded from visualisation
 #   - "All known primary" and "All unknown primary" summary bars are constructed from tumour types in the table
 # Output:
