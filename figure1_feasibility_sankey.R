@@ -1,12 +1,12 @@
-# figure1_sankey.R
+# figure1_feasibility_sankey.R
 # Purpose: Generates the Sankey diagram underlying Figure 1 (feasibility and panel coverage)
 # Environment: 
 #     R version 4.4.2
 #     RStudio 2024.09.1+394
 # Required packages: 
-#     networkD3 v0.4
-#     htmlwidgets v1.6.4.
-#     extrafont v0.20
+#     networkD3   (0.4)
+#     htmlwidgets (1.6.4)
+#     extrafont   (0.20)
 # Input: 
 #     None: node and link data defined in the script (counts corresponding to the curated cohort described in the manuscript)
 # Output: output/Figure1_sankey_raw.html 
@@ -84,6 +84,6 @@ sankey <- sankeyNetwork(Links = links, Nodes = nodes,
 # Save
 saveWidget(
   sankey,
-  file = "output/Figure1_sankey_raw.html",
+  file = "output/Figure1_feasibility_sankey_raw.html",
   selfcontained = TRUE
 )
