@@ -1,5 +1,4 @@
-# figure2B_actionability_counts.R
-# Purpose: Generate Figure 2B: number of patients by number of actionable biomarkers (0, 1, 2, 3+), stratified by diagnosis category (known primary tumour vs CUP)
+# figure2a_actionability_counts.R
 # Environment:
 #   R version 4.4.2
 #   RStudio 2024.09.1+394
