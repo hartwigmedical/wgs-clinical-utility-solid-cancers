@@ -81,9 +81,6 @@ sankey <- sankeyNetwork(Links = links, Nodes = nodes,
                         width = 1000,
                         height = 500)
 
-# Plot
-sankey
-
 # Save
 saveWidget(
   sankey,
