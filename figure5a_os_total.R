@@ -100,6 +100,8 @@ km_plot <- ggsurvplot(
   legend = "right"
 )
 
+y_orb <- 0.00
+
 km_plot$plot <- km_plot$plot +
   theme(panel.grid.minor = element_blank()) 
 
