@@ -16,7 +16,7 @@ library(dplyr)
 library(ggplot2)
 
 # Input
-df <- read_excel("~/Documents/Post-WIDE/SourceData_Main+ED.xlsx", sheet = "ED5")
+df <- read_excel("data/SourceData_Main+ED.xlsx", sheet = "ED5")
   data <- df %>%
   select("Tumour_type", "Gene", "Zygosity") 
   
