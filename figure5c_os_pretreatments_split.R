@@ -8,7 +8,7 @@
 #    ggplot2    (3.5.2)
 #    patchwork  (1.3.0)
 # Input: 
-#    data/SourceData_Main+ED.xlsx, sheet "Fig5"
+#    data/SourceData_Main+ED.xlsx, sheet: Fig5
 # Output:
 #   output/Figure5C_os_pretreatments_split.pdf
 # Notes on figure assembly:
