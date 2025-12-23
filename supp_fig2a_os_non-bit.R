@@ -33,7 +33,7 @@ ceil_day <- function(x) ifelse(is.na(x), NA_real_, ceiling(x - 1e-12))
 
 # Input
 df <- read_excel(
-  path  = "~/Documents/Post-WIDE/SourceData_Main+ED.xlsx",
+  path  = "data/SourceData_Main+ED.xlsx",
   sheet = "SuppFig2"
 ) %>%
   mutate(
