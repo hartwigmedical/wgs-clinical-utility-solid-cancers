@@ -1,4 +1,4 @@
-# figure2a_actionability_counts.R
+# figure2b_actionability_counts.R
 # Environment:
 #   R version 4.4.2
 #   RStudio 2024.09.1+394
