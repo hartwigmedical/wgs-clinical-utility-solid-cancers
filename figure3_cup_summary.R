@@ -63,7 +63,6 @@ treat_levels <- c("No treatment data", "No systemic treatment", "CUP regimen", "
 df <- df %>%
   mutate(
     treatment_cat = case_when(
-      # Exacte categorieën (zoals jij aangeeft dat ze in de sheet staan)
       WGS_informed_treatment == "Biomarker-informed reimbursed treatment" ~ "Reimbursed",
       WGS_informed_treatment == "Biomarker-informed experimental treatment" ~ "Exp. trial",
       WGS_informed_treatment == "Non-biomarker-informed standard-of-care treatment" ~ "Standard care",
