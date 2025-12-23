@@ -8,8 +8,7 @@
 #   ggplot2 (v3.5.2)
 #   dplyr   (v1.1.4)
 # Input:
-#   data/SourceData_Main+ED.xlsx
-#   Sheet: "Fig2C"
+#   data/SourceData_Main+ED.xlsx, sheet: Fig2C
 # Output:
 #   output/Figure2C_tmb_density.pdf
 #   (Final layout refinements and label positioning were adjusted in Inkscape)
