@@ -1,5 +1,4 @@
-# figure2A_actionability_boxplot.R
-# Purpose: Generate the boxplots underlying Figure 2A: number of biomarkers and actionable biomarkers per patient, stratified by diagnosis category (known primary tumour vs CUP)
+# figure2a_actionability_boxplot.R
 # Environment:
 #   R version 4.4.2
 #   RStudio 2024.09.1+394
