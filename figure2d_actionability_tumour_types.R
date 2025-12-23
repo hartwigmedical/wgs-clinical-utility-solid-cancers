@@ -1,5 +1,4 @@
-# figure2D_actionability_tumour_types.R
-# Purpose: Generate Figure 2D: fraction of patients harbouring actionable biomarkers per tumour type (stacked bars, percentages summing to 100% per tumour type; includes total N labels below bars).
+# figure2d_actionability_tumour_types.R
 # Environment:
 #   R version 4.4.2
 #   RStudio 2024.09.1+394
