@@ -21,7 +21,7 @@ library(ggplot2)
 
 # Input
 df <- read_excel(
-  "~/Documents/Post-WIDE/SourceData_Main+ED.xlsx",
+  "data/SourceData_Main+ED.xlsx",
   sheet = "SuppFig2"
 ) %>%
   mutate(
