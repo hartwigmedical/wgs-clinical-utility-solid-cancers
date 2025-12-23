@@ -1,4 +1,17 @@
-
+# supp_figdc_os_known_vs_cup.R
+# Environment: R 4.4.2; RStudio 2024.09.1+394
+# Required packages: 
+#    readxl     (1.4.5) 
+#    dplyr      (1.1.4)
+#    survival   (3.7-0)
+#    survminer  (0.5.0)
+#    ggplot2    (3.5.2)
+# Input: 
+#    data/SourceData_Main+ED.xlsx, sheet "SuppFig2"
+# Output:
+#   output/SuppFig2d_os_known_vs_cup.pdf
+# Notes on figure assembly:
+#     The curves were assembled into the final multi-panel figure in Inkscape; only label positioning was adjusted manually for legibility
 
 library(readxl)
 library(dplyr)
@@ -117,8 +130,6 @@ p$plot <- p$plot +
   annotate("text", x = 650, y = 0.95, label = txt, hjust = 0, size = 4) +
   labs(title = "") +
   theme(panel.grid.minor = element_blank())
-
-print(p)
 
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
