@@ -1,5 +1,4 @@
-# figure2C_tmb_density.R
-# Purpose: Generate the density plot underlying Figure 2C (TMB distribution by diagnosis category)
+# figure2c_tmb_density.R
 # Environment:
 #   R version 4.4.2
 #   RStudio 2024.09.1+394
