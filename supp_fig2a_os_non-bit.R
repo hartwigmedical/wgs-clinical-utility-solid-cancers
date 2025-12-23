@@ -7,7 +7,7 @@
 #    survminer  (0.5.0)
 #    ggplot2    (3.5.2)
 # Input: 
-#    data/SourceData_Main+ED.xlsx, sheet "SuppFig2"
+#    data/SourceData_Main+ED.xlsx, sheet: SuppFig2
 # Output:
 #   output/SuppFig2a_os_non-bit.pdf
 # Notes on figure assembly:
