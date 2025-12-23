@@ -8,7 +8,7 @@
 #    ggplot2    (3.5.2)
 #    patchwork  (1.3.0)
 # Input: 
-#    data/SourceData_Main+ED.xlsx, sheet "SuppFig2"
+#    data/SourceData_Main+ED.xlsx, sheet: SuppFig2
 # Output:
 #   output/SuppFig2b_os_pretreatments_non-bit.pdf
 # Notes on figure assembly:
