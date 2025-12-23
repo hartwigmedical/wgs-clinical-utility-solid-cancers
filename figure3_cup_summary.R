@@ -30,7 +30,6 @@ library(scales)
 df <- read_excel(
   "data/SourceData_Main+ED.xlsx", 
   sheet = "Fig3") 
-  
 
 df <- read_excel(file, sheet = sheet) %>%
   mutate(
@@ -56,6 +55,8 @@ df <- df %>%
     )
   ) %>%
   filter(!is.na(solution_group))
+
+solution_levels <- c("Not completely solved", "Aided CUP solution", "CUP definitively solved")
 
 treat_levels <- c("No treatment data", "No systemic treatment", "CUP regimen", "Non-targeted",
   "Standard care", "Exp. trial", "Reimbursed")
