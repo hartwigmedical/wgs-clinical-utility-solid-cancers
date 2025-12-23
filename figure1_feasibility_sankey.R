@@ -1,5 +1,4 @@
 # figure1_feasibility_sankey.R
-# Purpose: Generates the Sankey diagram underlying Figure 1 (feasibility and panel coverage)
 # Environment: 
 #     R version 4.4.2
 #     RStudio 2024.09.1+394
