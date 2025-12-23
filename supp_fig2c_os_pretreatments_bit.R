@@ -1,3 +1,18 @@
+# supp_fig3c_os_pretreatments_bit.R
+# Environment: R 4.4.2; RStudio 2024.09.1+394
+# Required packages: 
+#    readxl     (1.4.5) 
+#    dplyr      (1.1.4)
+#    survival   (3.7-0)
+#    survminer  (0.5.0)
+#    ggplot2    (3.5.2)
+# Input: 
+#    data/SourceData_Main+ED.xlsx, sheet "SuppFig2"
+# Output:
+#   output/SuppFig2c_os_pretreatments_bit.pdf
+# Notes on figure assembly:
+#     The curves were assembled into the final multi-panel figure in Inkscape; only label positioning was adjusted manually for legibility
+
 library(readxl)
 library(dplyr)
 library(survival)
