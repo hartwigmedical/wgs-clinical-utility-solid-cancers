@@ -10,7 +10,7 @@
 #   ggplot2    (3.5.2)
 #   scales     (1.3.0)
 # Input:
-#   data/SourceData_Main+ED.xlsx, sheet: ED5
+#   data/SourceData_Main+ED.xlsx, sheet: ED3
 # Output:
 #   output/ed3_vignette_cohort_bars.pdf  
 
