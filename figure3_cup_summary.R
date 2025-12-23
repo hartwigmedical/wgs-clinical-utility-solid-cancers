@@ -105,7 +105,7 @@ pie_plot <- ggplot(pie_data, aes(x = "", y = Count, fill = Category)) +
     legend.margin = margin(t = -14),
     legend.direction = "vertical",
     legend.title = element_blank(),
-    legend.text = element_text(size = 11, family = "Helvetica"),
+    legend.text = element_text(size = 10, family = "Helvetica"),
     legend.key.size = unit(0.9, "lines"),
     legend.key.spacing.y = unit(0.3, "lines")
   ) +
@@ -176,7 +176,7 @@ legend_bar <- get_legend(
     theme_minimal() +
     theme(
       legend.title = element_blank(),
-      legend.text = element_text(size = 9.5, family = "Helvetica"),
+      legend.text = element_text(size = 8, family = "Helvetica"),
       legend.key.size = unit(0.9, "lines"),
       legend.key.spacing.y = unit(0.3, "lines")
     )
@@ -195,7 +195,7 @@ final_plot <- ggdraw() +
   draw_plot(bar_plot_unsolved,  x = 0.098, y = 0.52,  width = 0.09, height = 0.3) +
   draw_plot(bar_plot_aided,     x = 0.098, y = 0.185, width = 0.09, height = 0.3) +
   draw_plot(bar_plot_solved,    x = 0.605, y = 0.52,  width = 0.09, height = 0.3) +
-  draw_plot(legend_bar,         x = 0.784,   y = 0.191, width = 0.2,  height = 0.3) +
+  draw_plot(legend_bar,         x = 0.778,   y = 0.191, width = 0.2,  height = 0.3) +
   theme(plot.margin = margin(t=0, r=1, b=0, l=0, unit = "in"))
 
 # Save
