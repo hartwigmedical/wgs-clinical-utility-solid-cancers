@@ -8,7 +8,7 @@
 #   tidyr   (1.3.1)
 #   ggplot2 (3.5.2)
 # Input:
-#   data/SourceData_Main+ED.xlsx, sheet "Fig4"
+#   data/SourceData_Main+ED.xlsx, sheet: Fig4
 # Output:
 #   A: output/figure4_panelA_known.pdf
 #   B: output/figure4_panelB_cup.pdf
