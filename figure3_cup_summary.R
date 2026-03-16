@@ -1,5 +1,4 @@
 # figure3_cup_summary.R
-# Purpose: Reproduces Figure 3 (CUP outcome categories + treatment categories), without hard-coded counts.
 # Environment:
 #   R version 4.4.2
 #   RStudio 2024.09.1+394
@@ -15,7 +14,6 @@
 #   data/SourceData_Main+ED.xlsx, sheet: Fig3
 # Output:
 #   output/figure3_cup_summary.pdf
-# Notes:
 #   Layout (panel placement) mirrors the original script; only the data are computed from Source Data.
 
 library(readxl)
