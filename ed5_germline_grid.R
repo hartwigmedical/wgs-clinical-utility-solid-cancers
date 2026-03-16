@@ -16,11 +16,10 @@ library(dplyr)
 library(ggplot2)
 
 # Input
-df <- read_excel("data/SourceData_Main+ED.xlsx", sheet = "ED5")
-  data <- df %>%
+df <- read_excel("data/SourceData_Main+ED.xlsx", sheet = "ED5") %>%
   select("Tumour_type", "Gene", "Zygosity") 
   
-data_summary <- data %>%
+data_summary <- df %>%
   group_by(Tumour_type, Gene, Zygosity) %>%
   summarise(Count = n(), .groups = "drop")
 
