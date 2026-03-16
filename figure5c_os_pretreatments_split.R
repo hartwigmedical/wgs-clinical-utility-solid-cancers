@@ -1,5 +1,7 @@
-# figure5C_os_pretreatments_split.R
-# Environment: R 4.4.2; RStudio 2024.09.1+394
+# figure5c_os_pretreatments_split.R
+# Environment: 
+#    R 4.4.2; 
+#    RStudio 2024.09.1+394
 # Required packages: 
 #    readxl     (1.4.5) 
 #    dplyr      (1.1.4)
@@ -10,9 +12,10 @@
 # Input: 
 #    data/SourceData_Main+ED.xlsx, sheet: Fig5
 # Output:
-#   output/Figure5C_os_pretreatments_split.pdf
+#   output/figure5c_os_pretreatments_split.pdf
 # Notes on figure assembly:
 #     The curves were assembled into the final multi-panel figure in Inkscape; only label positioning was adjusted manually for legibility
+#     To inspect corresponding risk tables, return km_plot instead of km_plot$plot and print km_plot$table
 
 library(readxl)
 library(dplyr)
@@ -20,6 +23,42 @@ library(survival)
 library(survminer)
 library(ggplot2)
 library(patchwork)
+
+# Input
+df <- read_excel(
+  path  = "data/SourceData_Main+ED.xlsx",
+  sheet = "Fig5"
+) %>%
+  mutate(
+    Overall_survival_days = as.numeric(Overall_survival_days),
+    Event = as.integer(Event),
+    Actionable_biomarkers = as.integer(Actionable_biomarkers),
+    Pretreatments = as.integer(Pretreatments),
+    Posttreatments = as.integer(Posttreatments),
+    Biomarker_informed_posttreatment = toupper(as.character(Biomarker_informed_posttreatment))
+  ) %>%
+  filter(
+    !is.na(Overall_survival_days),
+    Overall_survival_days >= 0,
+    !is.na(Event),
+    Actionable_biomarkers > 0
+  ) %>%
+  mutate(
+    Pretreatment_Group = case_when(
+      Pretreatments == 0 ~ "0",
+      Pretreatments == 1 ~ "1",
+      Pretreatments >= 2 ~ "2+",
+      TRUE ~ NA_character_
+    ),
+    KM_Group = case_when(
+      Biomarker_informed_posttreatment == "NO"  & Posttreatments == 0 ~ "BIT–Rx–",
+      Biomarker_informed_posttreatment == "NO"  & Posttreatments >  0 ~ "BIT–Rx+",
+      Biomarker_informed_posttreatment == "YES"                         ~ "BIT+",
+      TRUE ~ NA_character_
+    ),
+    KM_Group = factor(KM_Group, levels = c("BIT–Rx–", "BIT–Rx+", "BIT+"))
+  ) %>%
+  filter(!is.na(Pretreatment_Group), !is.na(KM_Group))
 
 hr_line <- function(model, coef_name, label) {
   s  <- summary(model)
@@ -164,42 +203,6 @@ make_km_one <- function(df_sub, pret_label, out_stub, show_legend = FALSE, show_
   km_plot$plot
 }
 
-# Input
-df <- read_excel(
-  path  = "data/SourceData_Main+ED.xlsx",
-  sheet = "Fig5"
-) %>%
-  mutate(
-    Overall_survival_days = as.numeric(Overall_survival_days),
-    Event = as.integer(Event),
-    Actionable_biomarkers = as.integer(Actionable_biomarkers),
-    Pretreatments = as.integer(Pretreatments),
-    Posttreatments = as.integer(Posttreatments),
-    Biomarker_informed_posttreatment = toupper(as.character(Biomarker_informed_posttreatment))
-  ) %>%
-  filter(
-    !is.na(Overall_survival_days),
-    Overall_survival_days >= 0,
-    !is.na(Event),
-    Actionable_biomarkers > 0
-  ) %>%
-  mutate(
-    Pretreatment_Group = case_when(
-      Pretreatments == 0 ~ "0",
-      Pretreatments == 1 ~ "1",
-      Pretreatments >= 2 ~ "2+",
-      TRUE ~ NA_character_
-    ),
-    KM_Group = case_when(
-      Biomarker_informed_posttreatment == "NO"  & Posttreatments == 0 ~ "BIT–Rx–",
-      Biomarker_informed_posttreatment == "NO"  & Posttreatments >  0 ~ "BIT–Rx+",
-      Biomarker_informed_posttreatment == "YES"                         ~ "BIT+",
-      TRUE ~ NA_character_
-    ),
-    KM_Group = factor(KM_Group, levels = c("BIT–Rx–", "BIT–Rx+", "BIT+"))
-  ) %>%
-  filter(!is.na(Pretreatment_Group), !is.na(KM_Group))
-
 # Plot
 p0 <- make_km_one(df %>% filter(Pretreatment_Group == "0"),  "0",  "Figure5C_pretx0",
                   show_legend = FALSE, show_y = TRUE)
@@ -223,7 +226,7 @@ combined <- (p0 | p1 | p2) /
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
       
 ggsave(
-  "output/Figure5C_os_pretreatments_split.pdf", 
+  "output/figure5c_os_pretreatments_split.pdf", 
   combined,
   width = 13.5,
   height = 5,
