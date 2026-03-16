@@ -10,7 +10,7 @@
 # Input:
 #   data/SourceData_Main+ED.xlsx, sheet: Fig2B
 # Output:
-#   output/Figure2B_actionability_counts.pdf (Final layout refinements were made in Inkscape before submission)
+#   output/figure2B_actionability_counts.pdf (Final layout refinements were made in Inkscape before submission)
 
 library(readxl)
 library(dplyr)
@@ -70,7 +70,7 @@ p <- ggplot(plot_data, aes(x = BiomarkerGroup, y = n, fill = `Diagnosis category
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
-  "output/Figure2B_actionability_counts.pdf", 
+  "output/figure2b_actionability_counts.pdf", 
    width = 6.5, 
    height = 5.5, 
    units = "in"
