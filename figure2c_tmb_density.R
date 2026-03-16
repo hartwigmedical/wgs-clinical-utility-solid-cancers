@@ -9,7 +9,7 @@
 # Input:
 #   data/SourceData_Main+ED.xlsx, sheet: Fig2C
 # Output:
-#   output/Figure2C_tmb_density.pdf
+#   output/figure2c_tmb_density.pdf
 #   (Final layout refinements and label positioning were adjusted in Inkscape)
 
 library(ggplot2)
@@ -97,7 +97,7 @@ p_final <- p_base +
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
-  "output/Figure2C_tmb_density.pdf", 
+  "output/figure2c_tmb_density.pdf", 
   width = 4.0, 
   height = 4.0, 
   units = "in"
