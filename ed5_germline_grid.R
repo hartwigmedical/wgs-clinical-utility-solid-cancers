@@ -9,7 +9,7 @@
 # Input:
 #   data/SourceData_Main+ED.xlsx, sheet: ED5
 # Output:
-#   output/ED5_germline_grid.pdf  
+#   output/ed5_germline_grid.pdf  
 
 library(readxl)
 library(dplyr)
