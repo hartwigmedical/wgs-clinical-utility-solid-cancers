@@ -1,5 +1,7 @@
-# supp_fig2a_os_non-bit.R
-# Environment: R 4.4.2; RStudio 2024.09.1+394
+# supp_fig2a_os_non_bit.R
+# Environment: 
+#    R 4.4.2
+#    RStudio 2024.09.1+394
 # Required packages: 
 #    readxl     (1.4.5) 
 #    dplyr      (1.1.4)
@@ -9,7 +11,7 @@
 # Input: 
 #    data/SourceData_Main+ED.xlsx, sheet: SuppFig2
 # Output:
-#   output/SuppFig2a_os_non-bit.pdf
+#   output/supp_fig2a_os_non_bit.pdf
 # Notes on figure assembly:
 #     The curves were assembled into the final multi-panel figure in Inkscape; only label positioning was adjusted manually for legibility
 
@@ -18,18 +20,6 @@ library(dplyr)
 library(survival)
 library(survminer)
 library(ggplot2)
-
-pairwise_hr <- function(model, L, digits = 2) {
-  b <- coef(model); V <- vcov(model)
-  est <- as.numeric(t(L) %*% b)
-  se  <- sqrt(as.numeric(t(L) %*% V %*% L))
-  HR  <- round(exp(est), digits)
-  L95 <- round(exp(est - 1.96 * se), digits)
-  U95 <- round(exp(est + 1.96 * se), digits)
-  c(HR = HR, L95 = L95, U95 = U95)
-}
-
-ceil_day <- function(x) ifelse(is.na(x), NA_real_, ceiling(x - 1e-12))
 
 # Input
 df <- read_excel(
@@ -60,6 +50,18 @@ df <- read_excel(
     !is.na(Event),
     !is.na(KM_Group)
   )
+
+pairwise_hr <- function(model, L, digits = 2) {
+  b <- coef(model); V <- vcov(model)
+  est <- as.numeric(t(L) %*% b)
+  se  <- sqrt(as.numeric(t(L) %*% V %*% L))
+  HR  <- round(exp(est), digits)
+  L95 <- round(exp(est - 1.96 * se), digits)
+  U95 <- round(exp(est + 1.96 * se), digits)
+  c(HR = HR, L95 = L95, U95 = U95)
+}
+
+ceil_day <- function(x) ifelse(is.na(x), NA_real_, ceiling(x - 1e-12))
 
 # Statistics: Cox
 fit <- survfit(Surv(Overall_survival_days, Event) ~ KM_Group, data = df)
@@ -186,13 +188,13 @@ km_plot$plot <- km_plot$plot +
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
-  "output/SuppFig2A_os_non-bit.pdf", 
+  "output/SuppFig2A_os_non_bit.pdf", 
   km_plot$plot, 
   width = 9, 
   height = 4, 
   units = "in")
 ggsave(
-  "output/SuppFig2A_os_non-bit_risktable.pdf", 
+  "output/SuppFig2A_os_non_bit_risktable.pdf", 
   km_plot$table, 
   width = 9, 
   height = 1.6, 
