@@ -22,7 +22,7 @@ library(readxl)
 
 # Input
 df <- read_excel(
-  "~/Documents/Post-WIDE/Supplementary Tables 1-7.xlsx", 
+   path  = "data/SourceData_Main+ED.xlsx", 
    sheet = "Fig2D")
 
 # Define
@@ -127,8 +127,8 @@ ggplot(df_long, aes(x = Tumour_type, y = Percentage, fill = FillKey)) +
     family = "Helvetica"
   ) + 
   annotate("text",
-           x = length(tumour_levels) + 0.5,  # net rechts van de laatste balk
-           y = -5,  # zelfde y-positie als de totalen
+           x = length(tumour_levels) + 0.5,
+           y = -5,  
            label = "  Number\nof patients",
            hjust = -0.4,
            size = 4,
