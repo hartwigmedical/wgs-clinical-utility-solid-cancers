@@ -10,7 +10,7 @@
 # Input:
 #   data/SourceData_Main+ED.xlsx, sheet: Fig2A
 # Output:
-#   output/Figure2A_actionability_boxplot.pdf
+#   output/figure2a_actionability_boxplot.pdf
 #   (In the final figure, minor layout refinements and labels were adjusted in Inkscape before submission)
 
 library(ggplot2)
@@ -80,7 +80,7 @@ ggplot(df_long, aes(x = Type, y = Value, fill = Fill)) +
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
-  filename = "output/Figure2A_actionability_boxplot.pdf",
+  filename = "output/figure2a_actionability_boxplot.pdf",
   width = 6.50,
   height = 6.50,
   units = "in"
