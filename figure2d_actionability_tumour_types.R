@@ -1,4 +1,4 @@
-# figure2d_actionability_tumour_types.R
+# figure2d_actionability_tumor_types.R
 # Environment:
 #   R version 4.4.2
 #   RStudio 2024.09.1+394
@@ -12,7 +12,7 @@
 #   - Tumour types with <5 patients are excluded from visualisation
 #   - "All known primary" and "All unknown primary" summary bars are constructed from tumour types in the table
 # Output:
-#   output/figure2d_actionability_tumour_types.pdf
+#   output/figure2d_actionability_tumor_types.pdf
 #   (Final panel assembly and addition of separate legend were performed in Inkscape)
 
 library(dplyr)
@@ -138,7 +138,7 @@ ggplot(df_long, aes(x = Tumour_type, y = Percentage, fill = FillKey)) +
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
-  filename = "output/figure2d_actionability_tumour_types.pdf",
+  filename = "output/figure2d_actionability_tumor_types.pdf",
   width = 12.5,
   height = 6,
   units = "in"
