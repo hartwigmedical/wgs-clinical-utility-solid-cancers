@@ -1,5 +1,7 @@
-# supp_figdc_os_known_vs_cup.R
-# Environment: R 4.4.2; RStudio 2024.09.1+394
+# supp_fig2d_os_known_vs_cup.R
+# Environment: 
+#    R 4.4.2
+#    RStudio 2024.09.1+394
 # Required packages: 
 #    readxl     (1.4.5) 
 #    dplyr      (1.1.4)
@@ -9,9 +11,10 @@
 # Input: 
 #    data/SourceData_Main+ED.xlsx, sheet: SuppFig2
 # Output:
-#   output/SuppFig2d_os_known_vs_cup.pdf
+#    output/supp_fig2d_os_known_vs_cup.pdf
 # Notes on figure assembly:
 #     The curves were assembled into the final multi-panel figure in Inkscape; only label positioning was adjusted manually for legibility
+#     To inspect the corresponding risk table, set risk.table = TRUE and view p$table
 
 library(readxl)
 library(dplyr)
@@ -134,8 +137,9 @@ p$plot <- p$plot +
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
-  "output/SuppFig2d_os_known_vs_cup.pdf",
+  "output/supp_fig2d_os_known_vs_cup.pdf",
   p$plot, 
   width = 4.0, 
   height = 4.0, 
-  units = "in")
+  units = "in"
+)
