@@ -9,7 +9,7 @@
 # Input:
 #   data/SourceData_Main+ED.xlsx, sheet: ED1
 # Output:
-#   output/ED1_tat_histogram.pdf  
+#   output/ed1_tat_histogram.pdf  
 
 library(readxl)
 library(dplyr)
@@ -60,7 +60,7 @@ print(p)
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
 
 ggsave(
-  filename = "output/ED1_tat_histogram.pdf",
+  filename = "output/ed1_tat_histogram.pdf",
   plot = p,
   width = 7.0,
   height = 5.0,
