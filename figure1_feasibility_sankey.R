@@ -9,7 +9,7 @@
 #     stringr     (1.5.1)
 # Input: 
 #     data/SourceData_Main+ED.xlsx, sheet: Fig1
-# Output: output/Figure1_sankey_raw.html 
+# Output: output/figure1_sankey_raw.html 
 #     HTML output was exported to SVG
 #     Final node positions were aligned manually and labels were added in Inkscape before submission as pdf
 
@@ -70,6 +70,6 @@ sankey <- sankeyNetwork(
 
 saveWidget(
   sankey, 
-  "output/Figure1_feasibility_sankey_raw.html", 
+  "output/figure1_feasibility_sankey_raw.html", 
   selfcontained = TRUE)
 
