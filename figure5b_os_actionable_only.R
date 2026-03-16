@@ -41,12 +41,12 @@ df <- read_excel(
   ) %>%
   mutate(
     KM_Group = case_when(
-      Actionable_biomarkers > 0 & Biomarker_informed_posttreatment == "NO"  & Posttreatments == 0 ~ "BIT-Rx–",
-      Actionable_biomarkers > 0 & Biomarker_informed_posttreatment == "NO"  & Posttreatments > 0  ~ "BIT-Rx+",
+      Actionable_biomarkers > 0 & Biomarker_informed_posttreatment == "NO"  & Posttreatments == 0 ~ "BIT–Rx–",
+      Actionable_biomarkers > 0 & Biomarker_informed_posttreatment == "NO"  & Posttreatments > 0  ~ "BIT–Rx+",
       Actionable_biomarkers > 0 & Biomarker_informed_posttreatment == "YES"                        ~ "BIT+",
       TRUE ~ NA_character_
     ),
-    KM_Group = factor(KM_Group, levels = c("BIT-Rx–", "BIT-Rx+", "BIT+"))
+    KM_Group = factor(KM_Group, levels = c("BIT–Rx–", "BIT–Rx+", "BIT+"))
   ) %>%
   filter(!is.na(KM_Group))
 
@@ -73,16 +73,16 @@ hr_line <- function(model, coef_name, label) {
   paste0(label, ": HR = ", hr, " (", ci[1], "–", ci[2], ")")
 }
 
-# Rx+ vs Rx–; TargetRx+ vs Rx– (ref = BIT-Rx–)
+# Rx+ vs Rx–; BIT+ vs Rx– (ref = BIT–Rx–)
 df1 <- df %>% mutate(KM_Group = relevel(KM_Group, ref = "Rx–"))
 model1 <- coxph(Surv(Overall_survival_days, Event) ~ KM_Group, data = df1)
-txt_ab <- hr_line(model1, "KM_GroupBIT-Rx+",       "BIT-Rx+ vs BIT-Rx–")
-txt_ac <- hr_line(model1, "KM_GroupBIT+", "BIT+ vs BIT-Rx–")
+txt_ab <- hr_line(model1, "KM_GroupBIT–Rx+",       "BIT–Rx+ vs BIT–Rx–")
+txt_ac <- hr_line(model1, "KM_GroupBIT+", "BIT+ vs BIT–Rx–")
 
-# TargetRx+ vs Rx+ (ref = BIT-Rx+)
-df3 <- df %>% mutate(KM_Group = relevel(KM_Group, ref = "BIT-Rx+"))
+# BIT+ vs Rx+ (ref = BIT–Rx+)
+df3 <- df %>% mutate(KM_Group = relevel(KM_Group, ref = "BIT–Rx+"))
 model3 <- coxph(Surv(Overall_survival_days, Event) ~ KM_Group, data = df3)
-txt_bc <- hr_line(model3, "KM_GroupBIT+", "BIT+ vs BIT-Rx+")
+txt_bc <- hr_line(model3, "KM_GroupBIT+", "BIT+ vs BIT–Rx+")
 
 # Plot
 km_plot <- ggsurvplot(
@@ -146,7 +146,7 @@ km_plot$plot <- km_plot$plot +
   annotate("text", x = 300, y = 0.94, label = txt_bc, hjust = 0, size = 4) +
   annotate("text", x = 300, y = 0.88, label = txt_ac, hjust = 0, size = 4) +
   annotate("text", x = 300, y = 0.82, label = txt_ab, hjust = 0, size = 4) +
-  scale_colour_manual(values = c("BIT-Rx–" = "#fee090", "BIT-Rx+" = "#fdb863", "BIT+" = "#60bd68"))
+  scale_colour_manual(values = c("BIT–Rx–" = "#fee090", "BIT–Rx+" = "#fdb863", "BIT+" = "#60bd68"))
 
 # Save
 if (!dir.exists("output")) dir.create("output", recursive = TRUE)
