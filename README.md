@@ -10,7 +10,7 @@ This repository is intended to document figure generation from the final curated
 
 **Manuscript title:** Real-world clinical utility of tumor whole-genome sequencing in solid cancers
 **Journal:** Nature Medicine  
-**Status:** In press; scheduled for online publication on 20 March 2026
+**Status:** Published online on 20 March 2026
 **DOI:** 10.1038/s41591-026-04280-2
 
 ## Software environment
